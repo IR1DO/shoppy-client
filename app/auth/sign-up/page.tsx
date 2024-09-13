@@ -6,7 +6,7 @@ const SignUp = () => {
     <Stack spacing={2} className='w-full max-w-xs'>
       <TextField label='Email' variant='outlined' type='email' />
       <TextField label='Password' variant='outlined' type='email' />
-      <Button variant='contained'>Login</Button>
+      <Button variant='contained'>Sign Up</Button>
       <Link component={NextLink} href='/auth/login' className='self-center'>
         Login
       </Link>
