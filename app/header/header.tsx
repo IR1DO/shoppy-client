@@ -15,10 +15,17 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { AuthContext } from '../auth/auth-context';
 import { MouseEvent, useContext, useState } from 'react';
+import Link from 'next/link';
 import { routes, unauthenticatedRoutes } from '../common/constants/routes';
+import { useRouter } from 'next/navigation';
 
-function Header() {
+interface HeaderProps {
+  logout: () => Promise<void>;
+}
+
+export default function Header({ logout }: HeaderProps) {
   const isAuthenticated = useContext(AuthContext);
+  const router = useRouter();
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
@@ -42,8 +49,8 @@ function Header() {
           <Typography
             variant='h6'
             noWrap
-            component='a'
-            href='#app-bar-with-responsive-menu'
+            component={Link}
+            href='/'
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -85,7 +92,13 @@ function Header() {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.title} onClick={handleCloseNavMenu}>
+                <MenuItem
+                  key={page.title}
+                  onClick={() => {
+                    router.push(page.path);
+                    handleCloseNavMenu();
+                  }}
+                >
                   <Typography sx={{ textAlign: 'center' }}>
                     {page.title}
                   </Typography>
@@ -118,22 +131,24 @@ function Header() {
             {pages.map((page) => (
               <Button
                 key={page.title}
-                onClick={handleCloseNavMenu}
+                onClick={() => {
+                  router.push(page.path);
+                  handleCloseNavMenu();
+                }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page.title}
               </Button>
             ))}
           </Box>
-          {isAuthenticated && <Settings />}
+          {isAuthenticated && <Settings logout={logout} />}
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
-export default Header;
 
-const Settings = () => {
+const Settings = ({ logout }: HeaderProps) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
@@ -170,7 +185,13 @@ const Settings = () => {
         onClose={handleCloseUserMenu}
       >
         {settings.map((setting) => (
-          <MenuItem key={setting} onClick={handleCloseUserMenu}>
+          <MenuItem
+            key={setting}
+            onClick={async () => {
+              await logout();
+              handleCloseUserMenu();
+            }}
+          >
             <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
           </MenuItem>
         ))}
