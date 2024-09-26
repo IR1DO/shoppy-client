@@ -9,8 +9,6 @@ export function middleware(request: NextRequest) {
       request.nextUrl.pathname.startsWith(route.path)
     )
   ) {
-    console.log('request.url: ', request.url);
-    console.log('new url: ', new URL('/auth/login', request.url));
     return Response.redirect(new URL('/auth/login', request.url));
   }
 }

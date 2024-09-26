@@ -1,10 +1,7 @@
-import getMe from './get-me';
+import CreateProductFab from './products/create-product-fab';
 
 const Home = async () => {
-  const me = await getMe();
-  console.log(me);
-
-  return <div>Home</div>;
+  return <CreateProductFab></CreateProductFab>;
 };
 
 export default Home;
