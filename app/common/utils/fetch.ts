@@ -2,10 +2,12 @@ import { cookies } from 'next/headers';
 import { API_URL } from '../constants/api';
 import { getErrorMessage } from './errors';
 
-const getHeaders = () => ({
+export const getHeaders = () => ({
   Cookie: cookies().toString(),
 });
 
+// FIXME these methods don't catch error,
+// which could cause bug at the frontend
 export const post = async (path: string, formData: FormData) => {
   const res = await fetch(`${API_URL}/${path}`, {
     method: 'POST',
@@ -16,7 +18,7 @@ export const post = async (path: string, formData: FormData) => {
   if (!res.ok) {
     return { error: getErrorMessage(parsedRes) };
   }
-  return { error: '' };
+  return { error: '', data: parsedRes };
 };
 
 export const get = async <T>(path: string, tags?: string[]) => {
