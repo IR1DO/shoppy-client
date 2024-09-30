@@ -16,6 +16,7 @@ const CreateProductFab = () => {
           setModalVisible(false);
         }}
       />
+      {/* FIXME sticky property will cause fab location not on the left-bottom position*/}
       <div className='sticky left-10 bottom-10'>
         <Fab color='primary' onClick={() => setModalVisible(true)}>
           <AddIcon />

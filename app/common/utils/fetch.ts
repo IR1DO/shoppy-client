@@ -8,11 +8,12 @@ export const getHeaders = () => ({
 
 // FIXME these methods don't catch error,
 // which could cause bug at the frontend
-export const post = async (path: string, formData: FormData) => {
+export const post = async (path: string, data: FormData | object) => {
+  const body = data instanceof FormData ? Object.fromEntries(data) : data;
   const res = await fetch(`${API_URL}/${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...getHeaders() },
-    body: JSON.stringify(Object.fromEntries(formData)),
+    body: JSON.stringify(body),
   });
   const parsedRes = await res.json();
   if (!res.ok) {
